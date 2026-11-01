@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>2048 — Play to Learn DSA</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">DSA MINI PROJECT · INTERACTIVE GAME LAB</div>
+        <h1>2048 <span>PLAY TO LEARN</span></h1>
+        <p>
+          Play normally. Discover the algorithm through what the board does.
+        </p>
+      </div>
+      <div class="scores">
+        <div><small>SCORE</small><strong id="score">0</strong></div>
+        <div><small>BEST</small><strong id="best">0</strong></div>
+      </div>
+    </header>
+    <main class="layout">
+      <section class="game-column">
+        <div class="game-toolbar">
+          <div>
+            <span class="live-dot"></span
+            ><b id="status">Your turn — choose a direction</b>
+          </div>
+          <div class="buttons">
+            <button id="undoBtn" class="soft" disabled>↶ Backtrack</button
+            ><button id="newBtn" class="dark">New game</button>
+          </div>
+        </div>
+        <div
+          id="board"
+          class="board"
+          role="grid"
+          aria-label="2048 game board"
+        ></div>
+        <div class="mobile-controls">
+          <button data-dir="up">↑</button>
+          <div>
+            <button data-dir="left">←</button><button data-dir="down">↓</button
+            ><button data-dir="right">→</button>
+          </div>
+        </div>
+        <div class="help">
+          Use your keyboard arrow keys or the buttons · Join equal tiles to
+          reach <b>2048</b>.
+        </div>
+      </section>
+      <aside class="coach">
+        <section class="coach-card spotlight">
+          <div class="card-head">
+            <span class="tag">LIVE GAME COACH</span
+            ><span id="eventPill" class="pill">WAITING</span>
+          </div>
+          <h2 id="coachTitle">Make your first move</h2>
+          <p id="coachText">
+            Watch the board. After a move, I'll point out the DSA idea that just
+            happened — no lecture required.
+          </p>
+          <div id="eventVisual" class="event-visual">
+            <div class="mini-arrow">←</div>
+            <div>
+              <b>Your move changes the board</b
+              ><small>Try any direction to begin.</small>
+            </div>
+          </div>
+        </section>
+        <section class="coach-card greedy">
+          <div class="card-head">
+            <span class="tag gold">GREEDY CHOICE</span
+            ><span class="tiny">LOCAL BEST MOVE</span>
+          </div>
+          <h2>Let the coach choose</h2>
+          <p>
+            Greedy looks at the moves available <i>right now</i> and picks the
+            one with the best immediate board score.
+          </p>
+          <div id="candidates" class="candidates">
+            <div class="candidate-empty">
+              Play a move to unlock the comparison.
+            </div>
+          </div>
+          <button id="greedyBtn" class="gold-btn">
+            ✨ Make the greedy move
+          </button>
+          <p class="micro">
+            The greedy choice is a heuristic, not a guaranteed perfect solution.
+          </p>
+        </section>
+        <section class="coach-card backtrack">
+          <div class="card-head">
+            <span class="tag purple">BACKTRACK / UNDO</span
+            ><span class="tiny">STACK · LIFO</span>
+          </div>
+          <h2>What if you change your mind?</h2>
+          <p>
+            Backtrack rewinds the latest move to the previous board state. Then
+            try a different direction and explore another path.
+          </p>
+          <div class="timeline" id="timeline">
+            <span class="time-node active">START</span
+            ><span class="time-line"></span
+            ><span class="time-node">MOVE 1</span>
+          </div>
+          <div class="backtrack-note" id="backtrackNote">
+            Your move history will appear here. Use <b>↶ Backtrack</b> after
+            making a move.
+          </div>
+        </section>
+        <section class="footer-stats">
+          <div><small>MOVES</small><b id="moves">0</b></div>
+          <div><small>MERGES</small><b id="merges">0</b></div>
+          <div><small>EMPTY CELLS</small><b id="empty">14</b></div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="tree-lab" id="treeLab">
+      <div class="tree-header">
+        <div>
+          <div class="eyebrow">INTERACTIVE DSA EXPLORER</div>
+          <h2>State Space Tree Visualizer</h2>
+          <p>
+            Explore connected future boards. Follow every legal route, compare
+            choices, and watch the best route turn green.
+          </p>
+        </div>
+        <div class="tree-actions">
+          <button id="generateTreeBtn" class="dark">
+            ＋ Generate State Space Tree
+          </button>
+          <button id="guidedBtn" class="soft" disabled>Check my choice</button>
+          <button id="bestPathBtn" class="soft" disabled>▶ Best path</button>
+          <button id="allPathsBtn" class="soft" disabled>
+            Explore all paths
+          </button>
+          <button id="bfsBtn" class="soft" disabled>Run BFS</button>
+          <button id="dfsBtn" class="soft" disabled>Run DFS</button>
+          <button id="resetTreeBtn" class="soft">Reset tree</button>
+        </div>
+      </div>
+      <div class="tree-legend">
+        <span><i class="legend-dot green"></i> Greedy-best path</span
+        ><span><i class="legend-dot blue"></i> Other valid move</span
+        ><span><i class="legend-dot red"></i> Your non-best choice</span
+        ><span><i class="legend-dot purple"></i> Random tile outcome</span>
+      </div>
+      <div class="tree-instructions" id="treeStatus">
+        Click <b>Generate State Space Tree</b> to build a tree from your current
+        2048 board.
+      </div>
+      <div class="tree-scroll">
+        <div id="treeCanvas" class="tree-canvas">
+          <div class="tree-placeholder">
+            Your animated state space tree will appear here.
+          </div>
+        </div>
+      </div>
+      <div class="tree-bottom">
+        <div class="tree-explain">
+          <b id="treeDetailTitle">How to read this tree</b>
+          <p id="treeDetail">
+            Start at the top board and follow the connected lines: move → random
+            tile → next move. Green marks the best immediate choice at each
+            decision; blue shows other legal choices; red marks a choice that is
+            not best.
+          </p>
+        </div>
+        <div class="tree-metrics">
+          <div><small>NODES CREATED</small><b id="treeNodes">0</b></div>
+          <div><small>BEST MOVE</small><b id="treeBest">—</b></div>
+          <div><small>TRAVERSAL</small><b id="treeTraversal">—</b></div>
+        </div>
+      </div>
+      <p class="tree-note">
+        <b>Learning note:</b> The tree explores two move levels. After each move
+        it shows representative +2 and +4 random-tile outcomes, then every legal
+        next move. Each sample tile is placed in the first empty cell to keep
+        the tree readable. The real game still spawns randomly. Green means best
+        immediate heuristic choice, not a guaranteed win.
+      </p>
+    </section>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div id="endModal" class="modal hidden">
+      <div class="modal-box">
+        <div class="eyebrow">GAME RESULT</div>
+        <h2 id="endTitle">Game over</h2>
+        <p id="endText"></p>
+        <button id="modalNew" class="dark">Play again</button>
+      </div>
+    </div>
+    <script src="js/app.js"></script>
+  </body>
+</html>
